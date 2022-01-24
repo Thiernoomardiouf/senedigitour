@@ -41,7 +41,9 @@ class BlockActionBar extends AbstractBlock {
             $blockButton = new BlockButtonPlain($this);
             $blockButton->setUrl($this->getUrlTrash());
             $blockButton->setLabel(n2_('View trash'));
+            $blockButton->addClass('n2_slider_trash');
             $blockButton->setSmall();
+            $blockButton->setIconBefore('ssi_16 ssi_16--delete', 'n2_slider_icon--blue');
             $blockButton->setTabIndex(-1);
             $blockButton->display();
         }
@@ -58,37 +60,54 @@ class BlockActionBar extends AbstractBlock {
             $blockButton = new BlockButtonPlain($this);
             $blockButton->setLabel(n2_('Order by'));
             $blockButton->setIcon('ssi_16 ssi_16--selectarrow');
+            $blockButton->setIconBefore('ssi_16 ssi_16--order', 'n2_slider_icon--blue');
+            $blockButton->addClass('n2_slider_order');
             $blockButton->setSmall();
             $blockOrderBy->setButton($blockButton);
 
             $manualOrder = new BlockFloatingMenuItem($this);
             $manualOrder->setLabel(n2_('Manual order'));
             $manualOrder->setIsActive($orderBy == 'ordering' && $orderByDirection == 'ASC');
-            $manualOrder->setUrl($this->getUrlDashboardOrderBy('ordering', 'ASC'));
+            $manualOrder->addAttribute('data-ordering', 'ordering');
+            $manualOrder->addAttribute('data-orderdirection', 'ASC');
+            $manualOrder->addClass('n2_floating_menu__item-order');
+            $manualOrder->setUrl('#');
             $blockOrderBy->addMenuItem($manualOrder);
 
             $orderAZ = new BlockFloatingMenuItem($this);
             $orderAZ->setLabel(n2_('A-Z'));
             $orderAZ->setIsActive($orderBy == 'title' && $orderByDirection == 'ASC');
-            $orderAZ->setUrl($this->getUrlDashboardOrderBy('title', 'ASC'));
+            $orderAZ->addAttribute('data-ordering', 'title');
+            $orderAZ->addAttribute('data-orderdirection', 'ASC');
+            $orderAZ->addClass('n2_floating_menu__item-order');
+            $orderAZ->setUrl('#');
             $blockOrderBy->addMenuItem($orderAZ);
 
             $orderZA = new BlockFloatingMenuItem($this);
             $orderZA->setLabel(n2_('Z-A'));
             $orderZA->setIsActive($orderBy == 'title' && $orderByDirection == 'DESC');
-            $orderZA->setUrl($this->getUrlDashboardOrderBy('title', 'DESC'));
+            $orderZA->addAttribute('data-ordering', 'title');
+            $orderZA->addAttribute('data-orderdirection', 'DESC');
+            $orderZA->addClass('n2_floating_menu__item-order');
+            $orderZA->setUrl('#');
             $blockOrderBy->addMenuItem($orderZA);
 
             $orderNewest = new BlockFloatingMenuItem($this);
             $orderNewest->setLabel(n2_('Newest first'));
             $orderNewest->setIsActive($orderBy == 'time' && $orderByDirection == 'DESC');
-            $orderNewest->setUrl($this->getUrlDashboardOrderBy('time', 'DESC'));
+            $orderNewest->addAttribute('data-ordering', 'time');
+            $orderNewest->addAttribute('data-orderdirection', 'DESC');
+            $orderNewest->addClass('n2_floating_menu__item-order');
+            $orderNewest->setUrl('#');
             $blockOrderBy->addMenuItem($orderNewest);
 
             $orderOldest = new BlockFloatingMenuItem($this);
             $orderOldest->setLabel(n2_('Oldest first'));
             $orderOldest->setIsActive($orderBy == 'time' && $orderByDirection == 'ASC');
-            $orderOldest->setUrl($this->getUrlDashboardOrderBy('time', 'ASC'));
+            $orderOldest->addAttribute('data-ordering', 'time');
+            $orderOldest->addAttribute('data-orderdirection', 'ASC');
+            $orderOldest->addClass('n2_floating_menu__item-order');
+            $orderOldest->setUrl('#');
             $blockOrderBy->addMenuItem($orderOldest);
 
             $blockOrderBy->display();
@@ -104,8 +123,10 @@ class BlockActionBar extends AbstractBlock {
 
         $blockButton = new BlockButtonPlain($this);
         $blockButton->setLabel(n2_('Bulk actions'));
-        $blockButton->setIcon('ssi_16 ssi_16--selectarrow');
         $blockButton->setSmall();
+        $blockButton->setIcon('ssi_16 ssi_16--selectarrow');
+        $blockButton->setIconBefore('ssi_16 ssi_16--slides', 'n2_slider_icon--blue');
+
         $blockBulkActions->setButton($blockButton);
 
         $duplicate = new BlockFloatingMenuItem($this);

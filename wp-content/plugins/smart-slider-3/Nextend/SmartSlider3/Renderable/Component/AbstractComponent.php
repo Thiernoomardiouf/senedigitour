@@ -602,9 +602,9 @@ abstract class AbstractComponent {
         $this->addLocalStyle('normal', 'background', $this->getBackgroundCSS($color, $gradient, $colorEnd, $backgroundStyle) . $backgroundStyle);
 
 
-        $colorHover       = $this->data->get('bgcolor-hover');
+        $colorHover       = $this->owner->fill($this->data->get('bgcolor-hover'));
         $gradientHover    = $this->data->get('bgcolorgradient-hover');
-        $colorEndHover    = $this->data->get('bgcolorgradientend-hover');
+        $colorEndHover    = $this->owner->fill($this->data->get('bgcolorgradientend-hover'));
         $isHoverDifferent = false;
         if (!empty($colorHover) && $colorHover != $color) {
             $isHoverDifferent = true;

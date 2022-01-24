@@ -12,7 +12,8 @@ use Nextend\Framework\Sanitize;
 <div class="n2_slider_manager__box n2_slider_box<?php echo $this->isGroup() ? ' n2_slider_box--group' : ' n2_slider_box--slider'; ?>"
      data-group="<?php echo $this->isGroup() ? '1' : '0'; ?>"
      data-title="<?php echo Sanitize::esc_attr($this->getSliderTitle()); ?>"
-     data-sliderid="<?php echo $this->getSliderID(); ?>">
+     data-sliderid="<?php echo $this->getSliderID(); ?>"
+     data-ordering="<?php echo $this->getOrdering(); ?>">
 
     <?php
     $thumbnailUrl   = Sanitize::esc_attr($this->getThumbnail());

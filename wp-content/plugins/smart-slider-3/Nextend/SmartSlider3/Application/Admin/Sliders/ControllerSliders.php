@@ -39,10 +39,10 @@ class ControllerSliders extends AbstractControllerAdmin {
     }
 
     protected function actionIndex() {
-
         $this->loadSliderManager();
 
         $view = new ViewSlidersIndex($this);
+        $view->setPaginationIndex(max(0, intval(Request::$REQUEST->getInt('pageIndex', 0)) - 1));   /*-1 needs because beautified query string*/
 
         $view->display();
     }
@@ -54,31 +54,10 @@ class ControllerSliders extends AbstractControllerAdmin {
         $view->display();
     }
 
-    protected function actionOrderBy() {
-        $ordering = Request::$REQUEST->getCmd('ordering', null);
-        if ($ordering == 'DESC' || $ordering == 'ASC') {
-            Settings::set('slidersOrder2', 'ordering');
-            Settings::set('slidersOrder2Direction', 'ASC');
-        }
-
-        $time = Request::$REQUEST->getCmd('time', null);
-        if ($time == 'DESC' || $time == 'ASC') {
-            Settings::set('slidersOrder2', 'time');
-            Settings::set('slidersOrder2Direction', $time);
-        }
-        $title = Request::$REQUEST->getCmd('title', null);
-        if ($title == 'DESC' || $title == 'ASC') {
-            Settings::set('slidersOrder2', 'title');
-            Settings::set('slidersOrder2Direction', $title);
-        }
-
-        $this->redirectToSliders();
-    }
-
     protected function actionExportAll() {
         $slidersModel = new ModelSliders($this);
-        $sliders      = $slidersModel->getAll(Request::$REQUEST->getInt('currentGroupID', 0), 'published');
-
+        $groupID = (Request::$REQUEST->getVar('inSearch', false))?'*':Request::$REQUEST->getInt('currentGroupID', 0);
+        $sliders      = $slidersModel->getAll($groupID, 'published');
         $ids = Request::$REQUEST->getVar('sliders');
 
         $files = array();

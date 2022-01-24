@@ -16,6 +16,7 @@ class ViewSlidersIndex extends AbstractView {
      * @var LayoutDefault
      */
     protected $layout;
+    protected $paginationIndex = 0;
 
     public function display() {
 
@@ -35,12 +36,17 @@ class ViewSlidersIndex extends AbstractView {
         $this->layout->render();
     }
 
+    public function setPaginationIndex($index) {
+        $this->paginationIndex = $index;
+    }
+
     protected function displayHeader() {
     }
 
     protected function displaySliderManager() {
 
         $sliderManager = new BlockSliderManager($this);
+        $sliderManager->setPaginationIndex($this->paginationIndex);
         $this->layout->addContentBlock($sliderManager);
     }
 } 

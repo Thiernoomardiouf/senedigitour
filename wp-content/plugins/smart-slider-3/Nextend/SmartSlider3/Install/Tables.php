@@ -204,6 +204,28 @@ class Tables {
         ));
     }
 
+
+    public function reindexOrders() {
+        $query   = "SELECT
+            sliders.*
+        FROM
+            `#__nextend2_smartslider3_sliders` AS sliders
+        LEFT JOIN `#__nextend2_smartslider3_sliders_xref` AS xref
+        ON
+            xref.slider_id = sliders.id
+        WHERE
+            (
+                xref.group_id IS NULL OR xref.group_id = 0
+            )
+        ORDER BY ordering";
+        $sliders = Database::queryAll(Database::parsePrefix($query));
+        foreach ($sliders as $idx => $slider) {
+            $this->query("UPDATE `#__nextend2_smartslider3_sliders` SET `ordering` = '" . $idx . "'  WHERE `id` = " . $slider['id'] . " ");
+        }
+
+    }
+
+
     /**
      * @param string       $tableName
      * @param array|string $colNames

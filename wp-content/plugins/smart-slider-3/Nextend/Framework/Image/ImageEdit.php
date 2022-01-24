@@ -97,6 +97,9 @@ class ImageEdit {
                     }
                     $extension = 'png';
                     break;
+                case IMAGETYPE_WEBP:
+                    $extension = 'webp';
+                    break;
             }
             if (!$extension) {
                 return $originalImageUrl;
@@ -142,6 +145,9 @@ class ImageEdit {
                     $image = $rotated;
                 }
             }
+        } else if ($extension == 'webp') {
+            //@TODO: should we need to care about rotation?
+            $image = @imagecreatefromwebp($imagePath);
         }
 
         if (isset($image) && $image) {
@@ -159,6 +165,10 @@ class ImageEdit {
                         imagepng($image, $targetFile);
                     } else if ($extension == 'jpg') {
                         imagejpeg($image, $targetFile, $quality);
+                    } else if ($extension == 'webp') {
+                        imagesavealpha($image, true);
+                        imagealphablending($image, false);
+                        imagewebp($image, $targetFile, $quality);
                     }
                     imagedestroy($image);
 
@@ -173,7 +183,7 @@ class ImageEdit {
             }
             if ($rotated || $originalWidth != $targetWidth || $originalHeight != $targetHeight) {
                 $newImage = imagecreatetruecolor($targetWidth, $targetHeight);
-                if ($extension == 'png') {
+                if ($extension == 'png' || $extension == 'webp') {
                     imagesavealpha($newImage, true);
                     imagealphablending($newImage, false);
                     $transparent = imagecolorallocatealpha($newImage, 255, 255, 255, 127);
@@ -199,6 +209,8 @@ class ImageEdit {
                 imagepng($newImage, $targetFile);
             } else if ($extension == 'jpg') {
                 imagejpeg($newImage, $targetFile, $quality);
+            } else if ($extension == 'webp') {
+                imagewebp($newImage, $targetFile, $quality);
             }
             imagedestroy($newImage);
 
@@ -272,6 +284,9 @@ class ImageEdit {
                     }
                     $extension = 'png';
                     break;
+                case IMAGETYPE_WEBP:
+                    $extension = 'webp';
+                    break;
             }
             if (!$extension) {
                 return $originalImageUrl;
@@ -311,6 +326,9 @@ class ImageEdit {
                     $image = $rotated;
                 }
             }
+        } else if ($extension == 'webp') {
+            //@TODO: should we need to care about rotation?
+            $image = @imagecreatefromwebp($imagePath);
         }
 
         if ($image) {
@@ -320,7 +338,7 @@ class ImageEdit {
             $targetHeight   = $originalHeight * $scale;
             if ((isset($rotated) && $rotated) || $originalWidth != $targetWidth || $originalHeight != $targetHeight) {
                 $newImage = imagecreatetruecolor($targetWidth, $targetHeight);
-                if ($extension == 'png') {
+                if ($extension == 'png' || $extension == 'webp') {
                     imagesavealpha($newImage, true);
                     imagealphablending($newImage, false);
                     $transparent = imagecolorallocatealpha($newImage, 255, 255, 255, 127);
@@ -342,6 +360,8 @@ class ImageEdit {
                 imagepng($newImage, $targetFile);
             } else if ($extension == 'jpg') {
                 imagejpeg($newImage, $targetFile, $quality);
+            } else if ($extension == 'webp') {
+                imagewebp($newImage, $targetFile, $quality);
             }
             imagedestroy($newImage);
 
@@ -414,6 +434,7 @@ class ImageEdit {
             'jpg'  => 'jpg',
             'jpeg' => 'jpg',
             'gif'  => 'gif',
+            'webp' => 'webp',
             'svg'  => 'svg'
         );
         $extension = strtolower($extension);
@@ -546,6 +567,9 @@ class ImageEdit {
                 case IMAGETYPE_PNG:
                     $extension = 'png';
                     break;
+                case IMAGETYPE_WEBP:
+                    $extension = 'webp';
+                    break;
             }
             if (!$extension) {
                 return $originalImageUrl;
@@ -594,6 +618,14 @@ class ImageEdit {
                     imagedestroy($image);
                     $image = $rotated;
                 }
+            }
+        } else if ($extension == 'webp') {
+            //@TODO: should we need to care about rotation?
+            $image = @imagecreatefromwebp($imagePath);
+            if (!imageistruecolor($image)) {
+                imagepalettetotruecolor($image);
+                imagealphablending($image, true);
+                imagesavealpha($image, true);
             }
         }
 

@@ -49,6 +49,7 @@
 
   .n2-thumbnail-dot {
     position: relative;
+    cursor: pointer;
 
     img {
       object-fit: cover;
@@ -111,6 +112,7 @@
     .n2-thumbnail-dot {
       display: grid;
       grid-template-columns: auto 1fr;
+      overflow:hidden;
     }
 
     .nextend-thumbnail-button {

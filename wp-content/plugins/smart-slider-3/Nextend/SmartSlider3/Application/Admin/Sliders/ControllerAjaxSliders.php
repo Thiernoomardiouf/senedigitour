@@ -7,6 +7,7 @@ namespace Nextend\SmartSlider3\Application\Admin\Sliders;
 use Nextend\Framework\Controller\Admin\AdminAjaxController;
 use Nextend\Framework\Data\Data;
 use Nextend\Framework\Filesystem\Filesystem;
+use Nextend\Framework\Misc\HttpClient;
 use Nextend\Framework\Model\StorageSectionManager;
 use Nextend\Framework\Notification\Notification;
 use Nextend\Framework\Platform\Platform;
@@ -70,7 +71,7 @@ class ControllerAjaxSliders extends AdminAjaxController {
         $this->validatePermission('smartslider_edit');
 
         $slidersModel = new ModelSliders($this);
-        $result       = $slidersModel->order(Request::$REQUEST->getVar('groupID', 0), Request::$REQUEST->getVar('sliderorder'), Request::$REQUEST->getInt('isReversed', 1));
+        $result       = $slidersModel->order(Request::$REQUEST->getVar('groupID', 0), Request::$REQUEST->getVar('sliderorder'), Request::$REQUEST->getInt('isReversed', 1), Request::$REQUEST->getVar('orders', array()));
         $this->validateDatabase($result);
 
         Notification::success(n2_('Slider order saved.'));
@@ -143,6 +144,100 @@ class ControllerAjaxSliders extends AdminAjaxController {
                              ->set('free', 'review', 1);
 
         $this->response->respond();
+    }
+
+    public function actionSearch() {
+        $this->validateToken();
+        $slidersModel = new ModelSliders($this);
+
+        $keyword = Request::$REQUEST->getVar('keyword', '');
+        $sliders = array();
+
+        $url     = parse_url($keyword);
+        $baseUrl =parse_url(Platform::getSiteUrl()) ;
+
+        if (isset($url['host']) &&  $url['host'] === $baseUrl['host']) {
+            $options = array(
+                'error' => true,
+            );
+
+            $content = HttpClient::get($keyword, $options);
+            preg_match_all('/data-ssid="(?<id>[0-9]+)/', $content, $matches);
+
+            foreach ($matches['id'] as $sliderID) {
+                if ($_slider = $slidersModel->getWithThumbnail($sliderID)) {
+                    array_push($sliders, $_slider);
+                }
+            }
+        }
+
+        $sliders = array_merge($sliders, $slidersModel->getSearchResults($keyword));
+        $result  = array();
+        if (!empty($sliders)) {
+            foreach ($sliders as $slider) {
+                $result[] = array(
+                    'id'            => $slider['id'],
+                    'alias'         => $slider['alias'],
+                    'title'         => $slider['title'],
+                    'thumbnail'     => $this->getSliderThumbnail($slider),
+                    'isGroup'       => $slider['type'] == 'group',
+                    'childrenCount' => $slider['slides'] > 0 ? $slider['slides'] : 0,
+                    'editUrl'       => $this->getUrlSliderEdit($slider['id'], $slider['group_id']),
+                    'order'         => $slider['ordering']
+                );
+            }
+        }
+
+        $this->response->respond($result);
+
+    }
+
+    public function actionPagination() {
+        $this->validateToken();
+        $slidersModel   = new ModelSliders($this);
+        $pageIndex      = Request::$REQUEST->getInt('pageIndex', 0);
+        $limit          = Request::$REQUEST->getVar('limit', 20);
+        $orderBy        = Request::$REQUEST->getCmd('orderBy', 'ordering');
+        $orderDirection = Request::$REQUEST->getCmd('orderDirection', 'ASC');
+
+        Settings::set('limit', $limit);
+        Settings::set('slidersOrder2', $orderBy);
+        Settings::set('slidersOrder2Direction', $orderDirection);
+
+        if ($pageIndex < 0) {
+            $pageIndex = 0;
+        }
+
+        $sliderCount = $slidersModel->getSlidersCount('published', true);
+        $result      = array();
+
+        $sliders = $slidersModel->getAll(0, 'published', $orderBy, $orderDirection, $pageIndex, $limit);
+
+        //if last page is empty
+        if (empty($sliders) && $sliderCount) {
+            $lastPageIndex       = intval(ceil(($sliderCount - $limit) / $limit));
+            $sliders             = $slidersModel->getAll(0, 'published', $orderBy, $orderDirection, $lastPageIndex, $limit);
+            $result['pageIndex'] = $lastPageIndex;
+        }
+
+        if (!empty($sliders)) {
+            foreach ($sliders as $slider) {
+                $result['sliders'][] = array(
+                    'id'            => $slider['id'],
+                    'alias'         => $slider['alias'],
+                    'title'         => $slider['title'],
+                    'thumbnail'     => $this->getSliderThumbnail($slider),
+                    'isGroup'       => $slider['type'] == 'group',
+                    'childrenCount' => $slider['slides'] > 0 ? $slider['slides'] : 0,
+                    'editUrl'       => $this->getUrlSliderEdit($slider['id'], 0),
+                    'order'         => $slider['ordering']
+                );
+            }
+            $result['slidersPerPage'] = count($sliders);
+        }
+        $result['sliderCount'] = $sliderCount;
+
+        $this->response->respond($result);
     }
 
     protected function actionImport() {

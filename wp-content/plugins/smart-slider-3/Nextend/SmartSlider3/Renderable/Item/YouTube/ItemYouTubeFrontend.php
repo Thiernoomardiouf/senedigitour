@@ -175,10 +175,10 @@ class ItemYouTubeFrontend extends AbstractItemFrontend {
     }
 
     private function parseYoutubeUrl($youTubeUrl) {
-        preg_match('/^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#\&\?]*).*/', $youTubeUrl, $matches);
+        preg_match('%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/\s]{11})%i', $youTubeUrl, $matches);
 
-        if ($matches && isset($matches[7]) && strlen($matches[7]) == 11) {
-            return $matches[7];
+        if ($matches && isset($matches[1]) && strlen($matches[1]) == 11) {
+            return $matches[1];
         }
 
         return $youTubeUrl;

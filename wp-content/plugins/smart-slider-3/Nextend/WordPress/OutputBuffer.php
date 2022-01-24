@@ -94,7 +94,7 @@ class OutputBuffer {
                     $this,
                     "outputCallback"
                 ));
-            });
+            }, 11);
         }
     }
 

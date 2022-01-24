@@ -2,19 +2,19 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2021-11-11 15:39+0100\n"
+"POT-Creation-Date: 2022-01-13 13:55+0100\n"
 "PO-Revision-Date: 2020-03-10 19:30+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
+"Language: en\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 3.0\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.0.1\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-KeywordsList: ;n2_;n2_e;n2_n:1,2;n2_en:1,2;n2_x:1,2c;n2_ex:1,2c\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"Language: en\n"
 "X-Poedit-Flags-xgettext: --no-location\n"
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPathExcluded-0: Framework/Asset/Builder/cache\n"
@@ -1076,13 +1076,19 @@ msgstr ""
 msgid "Set"
 msgstr ""
 
+msgid "Edit"
+msgstr ""
+
+msgid "Group"
+msgstr ""
+
+msgid "Edit slider"
+msgstr ""
+
 msgid "Up"
 msgstr ""
 
 msgid "Insert group"
-msgstr ""
-
-msgid "Group"
 msgstr ""
 
 msgid "Move to trash"
@@ -1125,6 +1131,24 @@ msgid "delete these slides"
 msgstr ""
 
 msgid "delete this slide"
+msgstr ""
+
+msgid "Max width"
+msgstr ""
+
+msgid "Margin"
+msgstr ""
+
+msgid "top"
+msgstr ""
+
+msgid "right"
+msgstr ""
+
+msgid "bottom"
+msgstr ""
+
+msgid "left"
 msgstr ""
 
 msgid "Animations"
@@ -1444,9 +1468,6 @@ msgid "Fill mode"
 msgstr ""
 
 msgid "Align"
-msgstr ""
-
-msgid "Margin"
 msgstr ""
 
 msgid "Puts a fix margin around your slider."
@@ -1956,9 +1977,6 @@ msgstr ""
 msgid "Color end"
 msgstr ""
 
-msgid "Max width"
-msgstr ""
-
 msgid "Position"
 msgstr ""
 
@@ -2262,9 +2280,6 @@ msgstr ""
 msgid "Scale down"
 msgstr ""
 
-msgid "Edit"
-msgstr ""
-
 msgid "Static overlay"
 msgstr ""
 
@@ -2316,7 +2331,7 @@ msgstr ""
 msgid "Drop images here"
 msgstr ""
 
-msgid "Edit slider"
+msgid "Search Project"
 msgstr ""
 
 msgid "View trash"
@@ -2343,7 +2358,27 @@ msgstr ""
 msgid "Export"
 msgstr ""
 
+msgid "Show"
+msgstr ""
+
+#, php-format
+msgid "Showing %s to %s of %s projects"
+msgstr ""
+
+msgid "No projects to show"
+msgstr ""
+
 msgid "New project"
+msgstr ""
+
+msgid "Sorry we couldn’t find any matches"
+msgstr ""
+
+msgid "Please try searching with another term."
+msgstr ""
+
+#, php-format
+msgid "Showing %s results for %s."
 msgstr ""
 
 msgid "Module"
@@ -4338,6 +4373,9 @@ msgstr ""
 msgid "Fan 3"
 msgstr ""
 
+msgid "Fan 4"
+msgstr ""
+
 msgid "Hills"
 msgstr ""
 
@@ -4378,6 +4416,24 @@ msgid "Wave 2"
 msgstr ""
 
 msgid "Waves"
+msgstr ""
+
+msgid "Columns 1"
+msgstr ""
+
+msgid "Columns 2"
+msgstr ""
+
+msgid "Paper 1"
+msgstr ""
+
+msgid "Paper 2"
+msgstr ""
+
+msgid "Paper 3"
+msgstr ""
+
+msgid "Paper 4"
 msgstr ""
 
 msgid "2 Colors"
@@ -5067,6 +5123,12 @@ msgstr ""
 msgid "No limit"
 msgstr ""
 
+msgid "Hide empty categories"
+msgstr ""
+
+msgid "Yes"
+msgstr ""
+
 msgid "Downloadable"
 msgstr ""
 
@@ -5463,6 +5525,69 @@ msgstr ""
 msgid "Animation duration"
 msgstr ""
 
+msgid "Countdown"
+msgstr ""
+
+msgid "Days"
+msgstr ""
+
+msgid "Hours"
+msgstr ""
+
+msgid "Minutes"
+msgstr ""
+
+msgid "Seconds"
+msgstr ""
+
+msgid "Use slide schedule"
+msgstr ""
+
+msgid "You can use the \"Unpublished on\" date of the slide itself."
+msgstr ""
+
+msgid "Use Slide Schedule"
+msgstr ""
+
+msgid "Go to Slide → Content tab and set the Unpublish on date for the slide."
+msgstr ""
+
+msgid "Displays the days, hours, minutes and seconds texts under the counter numbers. To display the labels in your own language, translate the texts in the language files."
+msgstr ""
+
+msgid "Gap"
+msgstr ""
+
+msgid "Creates vertical and horizontal distance between the counter elements."
+msgstr ""
+
+msgid "Tablet style"
+msgstr ""
+
+msgid "Set custom Gap and Column for tablet."
+msgstr ""
+
+msgid "Mobile style"
+msgstr ""
+
+msgid "Set custom Gap and Column for mobile."
+msgstr ""
+
+msgid "Action when ends"
+msgstr ""
+
+msgid "No action"
+msgstr ""
+
+msgid "Hide layer"
+msgstr ""
+
+msgid "Redirect to URL"
+msgstr ""
+
+msgid "Choose what happens after the counter reached zero."
+msgstr ""
+
 msgid "Circle 1"
 msgstr ""
 
@@ -5660,9 +5785,6 @@ msgid "Please note, that <b>we do not support</b> customized coding! The iframe 
 msgstr ""
 
 msgid "iframe url"
-msgstr ""
-
-msgid "Yes"
 msgstr ""
 
 msgid "You can disable the scroll on the iframe content."

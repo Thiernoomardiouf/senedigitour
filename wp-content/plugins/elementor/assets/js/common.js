@@ -1,4 +1,4 @@
-/*! elementor - v3.5.3 - 28-12-2021 */
+/*! elementor - v3.5.4 - 23-01-2022 */
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
@@ -10588,9 +10588,9 @@ var Debug = function Debug() {
     self.addError({
       type: error.name,
       message: error.message,
-      url: originalEvent.filename,
-      line: originalEvent.lineno,
-      column: originalEvent.colno
+      url: event.originalEvent.filename,
+      line: event.originalEvent.lineno,
+      column: event.originalEvent.colno
     });
   };
 

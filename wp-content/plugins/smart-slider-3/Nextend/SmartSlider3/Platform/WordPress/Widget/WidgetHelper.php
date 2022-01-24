@@ -14,11 +14,18 @@ class WidgetHelper {
             $this,
             'widgets_init'
         ), 11);
-        add_action('widgets_admin_page', array(
-            $this,
-            'widgets_admin_page'
-        ));
+
+        /**
+         * As fallback for the Classic Widgets
+         */
+        if ($this->isOldEditor()) {
+            add_action('widgets_admin_page', array(
+                $this,
+                'widgets_admin_page'
+            ));
+        }
     }
+
 
     public function widgets_init() {
 
@@ -32,10 +39,10 @@ class WidgetHelper {
         $widgetAreas = intval(Settings::get('wordpress-widget-areas', 1));
         if ($widgetAreas > 0) {
             for ($i = 1; $i <= $widgetAreas; $i++) {
-
+                $description = (!$this->isOldEditor()) ? 'Display this widget area in your theme: <strong>&lt;?php  dynamic_sidebar( \'smartslider_area_' . $i . '\' );  ?&gt; </strong>' : '';
                 register_sidebar(array(
                     'name'          => 'Custom Widget Area - #' . $i,
-                    'description'   => '',
+                    'description'   => $description,
                     'id'            => 'smartslider_area_' . $i,
                     'before_widget' => '',
                     'after_widget'  => '',
@@ -58,5 +65,11 @@ class WidgetHelper {
             echo '<div class="description">Display this widget area in your theme with: <pre style="white-space: pre-wrap;overflow:hidden;">&lt;?php dynamic_sidebar(\'' . $index . '\'); ?&gt;</pre></div>';
         }
 
+    }
+
+    private function isOldEditor() {
+        $blockEditor = function_exists('wp_use_widgets_block_editor');
+
+        return !$blockEditor || ($blockEditor && !wp_use_widgets_block_editor());
     }
 }

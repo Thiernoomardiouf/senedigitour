@@ -4,7 +4,7 @@ Tags: slider, wordpress slider, image slider, layer slider, responsive slider, s
 Donate link: https://sites.fastspring.com/nextend/product/smartslider3donate
 Requires at least: 4.9
 Tested up to: 5.8.1
-Stable tag: 3.5.1.2
+Stable tag: 3.5.1.3
 Requires PHP: 7.0
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -208,6 +208,24 @@ Of course! Smart Slider use protocol relative urls which works fine on http:// a
 9. Layer slider with layers styles. Made with FREE version.
 
 == Changelog ==
+
+= 3.5.1.3 - 18. January 2022 =
+* Feature: Pagination and Search options in the Dashboard. 
+* Feature: The variable selector is now available at the column and row background colors. 
+* Feature: We'll use pointer cursor at the thumbnails to indicate that they're clickable. 
+* Feature: Perfmatter compatibility improvements. 
+* Fix: Overflow hidden is added to vertical thumbnails to allow rounded borders. 
+* Fix: Firefox changed the default background color of the select tag, which creates less contrast between the text and background. We changed it back to white. 
+* Fix: The color picker allowed saving a 7 digit color code, which resulted a bad color. 
+* Fix: Margin and padding values are now translatable in the Slide editor UI.  
+* Fix: Optimize images option now works on full URLs. 
+* Fix: The YouTube layer didn't always recognize the youtu.be URLs properly. 
+* Fix: Static Overlay background options caused error when the only slide in the slider is a Static Overlay. 
+* Fix: Smart Slider's custom widget area will now properly display the publishing instructions. 
+* Fix: Background Blur could show up even if the fill mode was not set to Blur fit. 
+* Other: Spanish translation updated. Thanks, Rodrigo! 
+* Other: The es_ES.po and es_ES.mo renamed to es.po and es.mo respectively to support all Spanish languages. 
+
 
 = 3.5.1.2 - 18. November 2021 =
 * Feature: The old background animations are allowed again when the fill mode is not fill, but anything else. 

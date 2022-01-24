@@ -222,7 +222,6 @@ class LayerWindowSettingsSlide extends AbstractLayerWindowSettings {
                 'layerslide-backgroundImageBlur',
                 'layerslide-backgroundMode',
                 'layerslide-background-notice-image',
-                'layerslide-backgroundBlurFit'
             )
         );
         $fieldImage = new FieldImageResponsive($rowImage, 'slide-backgroundImage', n2_('Slide background'), '', $slideBackgroundAttr);
@@ -259,10 +258,10 @@ class LayerWindowSettingsSlide extends AbstractLayerWindowSettings {
             )
         ));
         new NumberSlider($rowImage, 'slide-backgroundBlurFit', n2_('Background blur'), 7, array(
-            'unit'  => 'px',
-            'min'=> 7,
-            'max'   => 50,
-            'wide'=>3
+            'unit' => 'px',
+            'min'  => 7,
+            'max'  => 50,
+            'wide' => 3
         ));
 
         new NumberSlider($rowImage, 'slide-backgroundImageOpacity', n2_('Opacity'), 100, array(

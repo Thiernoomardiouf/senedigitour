@@ -10,9 +10,18 @@ class AbstractButtonLabel extends AbstractButton {
 
     protected $icon = '';
 
-    protected function getContent() {
+    protected $iconBefore = "";
 
-        $content = '<span class="' . $this->baseClass . '__label">' . $this->getLabel() . '</span>';
+    protected $iconBeforeClass = "";
+
+    protected function getContent() {
+        $content = '';
+
+        if (!empty($this->iconBefore)) {
+            $content .= '<i class="' . $this->iconBefore . ' ' . $this->itemBeforeClass . '"></i>';
+        }
+
+        $content .= '<span class="' . $this->baseClass . '__label">' . $this->getLabel() . '</span>';
 
         if (!empty($this->icon)) {
             $content .= '<i class="' . $this->icon . '"></i>';
@@ -41,4 +50,14 @@ class AbstractButtonLabel extends AbstractButton {
     public function setIcon($icon) {
         $this->icon = $icon;
     }
+
+    /**
+     * @param string $icon
+     * @param string $extraClass
+     */
+    public function setIconBefore($icon, $extraClass = "") {
+        $this->iconBefore      = $icon;
+        $this->itemBeforeClass = $extraClass;
+    }
+
 }

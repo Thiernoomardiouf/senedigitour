@@ -128,6 +128,69 @@ class PostsPostsByIDs extends AbstractGenerator {
                     }
                 }
             }
+
+            $post_meta = get_post_meta($post->ID);
+
+            $excluded_metas = array(
+                'hc-editor-mode',
+                'techline-sidebar'
+            );
+
+            foreach ($excluded_metas as $excluded_meta) {
+                if (isset($post_meta[$excluded_meta])) {
+                    unset($post_meta[$excluded_meta]);
+                }
+            }
+
+            if (count($post_meta) && is_array($post_meta) && !empty($post_meta)) {
+                foreach ($post_meta as $key => $value) {
+                    if (count($value) && is_array($value) && !empty($value)) {
+                        foreach ($value as $v) {
+                            if (!empty($v) && !is_array($v) && !is_object($v)) {
+                                $key = str_replace(array(
+                                    '_',
+                                    '-'
+                                ), array(
+                                    '',
+                                    ''
+                                ), $key);
+                                if (array_key_exists($key, $record)) {
+                                    $key = 'meta' . $key;
+                                }
+                                if (is_serialized($v)) {
+                                    $unserialize_values = unserialize($v);
+                                    $unserialize_count  = 1;
+                                    if (!empty($unserialize_values) && is_array($unserialize_values)) {
+                                        foreach ($unserialize_values as $unserialize_value) {
+                                            if (!empty($unserialize_value) && is_string($unserialize_value)) {
+                                                $record['us_' . $key . $unserialize_count] = $unserialize_value;
+                                                $unserialize_count++;
+                                            } else if (is_array($unserialize_value)) {
+                                                foreach ($unserialize_value as $u_v) {
+                                                    if (is_string($u_v)) {
+                                                        $record['us_' . $key . $unserialize_count] = $u_v;
+                                                        $unserialize_count++;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                } else {
+                                    $record[$key] = $v;
+                                }
+                            }
+                        }
+                    }
+                }
+                if (!empty($record['elementordata'])) {
+                    $elementordatas = json_decode($record['elementordata']);
+                    foreach ($elementordatas as $elementordata) {
+                        foreach ($this->getElementorTextEditors($elementordata) as $elementorKey => $elementorVal) {
+                            $record[$elementorKey] = $elementorVal;
+                        }
+                    }
+                }
+            }
             if (isset($record['primarytermcategory'])) {
                 $primary                         = get_category($record['primarytermcategory']);
                 $record['primary_category_name'] = $primary->name;

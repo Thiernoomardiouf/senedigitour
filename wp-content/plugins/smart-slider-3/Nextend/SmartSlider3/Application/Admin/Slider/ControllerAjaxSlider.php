@@ -241,7 +241,10 @@ class ControllerAjaxSlider extends AdminAjaxController {
         $view = new ViewAjaxSliderBox($this);
         $view->setSlider($slider);
 
-        $this->response->respond($view->display());
+        $this->response->respond(array(
+            'html'        => $view->display(),
+            'sliderCount' => $slidersModel->getSlidersCount('published', true)
+        ));
     }
 
     public function actionChangeSliderType() {

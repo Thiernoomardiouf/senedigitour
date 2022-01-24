@@ -92,6 +92,14 @@ class BlockSliderBox extends AbstractBlock {
     /**
      * @return int
      */
+
+    public function getOrdering() {
+        return $this->slider['ordering'];
+    }
+
+    /**
+     * @return int
+     */
     public function getGroupID() {
         return $this->groupID;
     }

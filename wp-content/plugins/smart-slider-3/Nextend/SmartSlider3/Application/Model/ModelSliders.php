@@ -48,12 +48,13 @@ class ModelSliders extends AbstractModelTable {
     public function getWithThumbnail($id) {
         $slidesModel = new ModelSlides($this);
 
-        return Database::queryRow("SELECT sliders.*, IF(sliders.thumbnail != '',sliders.thumbnail,(SELECT slides.thumbnail from " . $slidesModel->getTableName() . " AS slides WHERE slides.slider = sliders.id AND slides.published = 1 AND slides.generator_id = 0 AND slides.thumbnail NOT LIKE '' ORDER BY  slides.first DESC, slides.ordering ASC LIMIT 1)) AS thumbnail,
+        return Database::queryRow("SELECT sliders.*,xref.group_id, IF(sliders.thumbnail != '',sliders.thumbnail,(SELECT slides.thumbnail from " . $slidesModel->getTableName() . " AS slides WHERE slides.slider = sliders.id AND slides.published = 1 AND slides.generator_id = 0 AND slides.thumbnail NOT LIKE '' ORDER BY  slides.first DESC, slides.ordering ASC LIMIT 1)) AS thumbnail,
          IF(sliders.type != 'group', 
                         (SELECT count(*) FROM " . $slidesModel->getTableName() . " AS slides2 WHERE slides2.slider = sliders.id GROUP BY slides2.slider),
                         (SELECT count(*) FROM " . $this->xref->getTableName() . " AS xref2 WHERE xref2.group_id = sliders.id GROUP BY xref2.group_id)
                   ) AS slides
         FROM " . $this->getTableName() . " AS sliders
+        LEFT JOIN " . $this->xref->getTableName() . " AS xref ON xref.slider_id = sliders.id
         WHERE sliders.id = :id", array(
             ":id" => $id
         ));
@@ -71,8 +72,22 @@ class ModelSliders extends AbstractModelTable {
         $this->markChanged($sliderid);
     }
 
-    public function getSlidersCount() {
-        $data = Database::queryRow("SELECT COUNT(*) AS sliders FROM " . $this->getTableName());
+    public function getSlidersCount($status = '*', $witGroup = false) {
+        $wheres = array();
+        $join   = "";
+
+        if ($status !== '*') {
+            $wheres[] = " WHERE _sliders.status LIKE " . Database::quote($status);
+        }
+
+        if ($witGroup) {
+            $join     = "LEFT JOIN " . $this->xref->getTableName() . " AS xref ON xref.slider_id = _sliders.id ";
+            $wheres[] = "(xref.group_id IS NULL OR xref.group_id = 0)";
+        }
+
+        $data = Database::queryRow("SELECT COUNT(*) AS sliders FROM " . $this->getTableName() . " as _sliders " . $join . " " . implode(' AND ', $wheres));
+
+
         if (!empty($data)) {
             return intval($data['sliders']);
         }
@@ -83,7 +98,7 @@ class ModelSliders extends AbstractModelTable {
     /**
      * @return mixed
      */
-    public function getAll($groupID = '*', $status = '*', $orderBy = 'ordering', $orderByDirection = 'ASC') {
+    public function getAll($groupID = '*', $status = '*', $orderBy = 'ordering', $orderByDirection = 'ASC', $page = null, $limit = 'all') {
         $slidesModel = new ModelSlides($this);
 
         if (empty($orderBy)) {
@@ -93,12 +108,17 @@ class ModelSliders extends AbstractModelTable {
             $orderByDirection = 'ASC';
         }
 
-        $_orderby = $orderBy . ' ' . $orderByDirection;
+        $_orderby   = $orderBy . ' ' . $orderByDirection;
+        $limitQuery = "";
 
         $wheres = array();
         if ($groupID !== '*') {
             if ($groupID == 0) {
                 $wheres[] = "(xref.group_id IS NULL OR xref.group_id = 0)";
+                if ($page !== null && $limit != 'all') {
+                    $first      = intval($page) * intval($limit);
+                    $limitQuery = "LIMIT " . $first . "," . intval($limit);
+                }
             } else {
                 if ($orderBy == 'ordering') {
                     $_orderby = 'xref.' . $orderBy . ' ' . $orderByDirection;
@@ -111,6 +131,7 @@ class ModelSliders extends AbstractModelTable {
         if ($status !== '*') {
             $wheres[] = "sliders.status LIKE " . Database::quote($status);
         }
+
 
         $sliders = Database::queryAll("
             SELECT sliders.*, 
@@ -129,13 +150,54 @@ class ModelSliders extends AbstractModelTable {
             FROM " . $this->getTableName() . " AS sliders
             LEFT JOIN " . $this->xref->getTableName() . " AS xref ON xref.slider_id = sliders.id
             WHERE " . implode(' AND ', $wheres) . "
-            ORDER BY " . $_orderby);
+            ORDER BY " . $_orderby . " " . $limitQuery);
+
 
         return $sliders;
     }
 
     public function _getAll() {
         return Database::queryAll("SELECT sliders.* FROM " . $this->getTableName() . " AS sliders");
+    }
+
+    public function getSearchResults($keyword = "") {
+        $slidesModel  = new ModelSlides($this);
+        $wheres       = array();
+        $orderByExtra = "";
+        $id           = intval($keyword);
+        if ($id > 0) {
+            $wheres[]     = "sliders.id LIKE '%" . $id . "%'";
+            $orderByExtra = "(sliders.id = '" . $id . "') DESC, ";
+        }
+
+        $wheres[] = "sliders.alias LIKE " . Database::quote('%' . $keyword . '%') . " OR sliders.title LIKE " . Database::quote('%' . $keyword . '%');
+
+        return Database::queryAll("SELECT sliders.*,
+                          xref.group_id,
+                          IF(sliders.thumbnail != '',
+                          sliders.thumbnail,
+                              IF(sliders.type != 'group',
+                                  (SELECT slides.thumbnail FROM " . $slidesModel->getTableName() . " AS slides WHERE slides.slider = sliders.id AND slides.published = 1 AND slides.generator_id = 0 AND slides.thumbnail NOT LIKE '' ORDER BY  slides.first DESC, slides.ordering ASC LIMIT 1),
+                                  ''
+                              )
+                        ) AS thumbnail,
+                         IF(sliders.type != 'group', 
+                        (SELECT count(*) FROM " . $slidesModel->getTableName() . " AS slides2 WHERE slides2.slider = sliders.id GROUP BY slides2.slider),
+                        (SELECT count(*) FROM " . $this->xref->getTableName() . " AS xref2 LEFT JOIN " . $this->getTableName() . " AS sliders2 ON sliders2.id = xref2.slider_id WHERE xref2.group_id = sliders.id AND sliders2.status LIKE 'published' GROUP BY xref2.group_id)
+                        ) AS slides
+                        FROM " . $this->getTableName() . " AS sliders
+                        LEFT JOIN " . $this->xref->getTableName() . " AS xref ON xref.slider_id = sliders.id
+                        WHERE 
+                            (
+                                xref.group_id IS NULL 
+                                OR xref.group_id = 0
+                                OR (SELECT _sliders.status FROM " . $this->getTableName() . " AS _sliders WHERE _sliders.id = xref.group_id ) LIKE 'published'
+                            )
+                            AND sliders.status LIKE 'published'
+                            AND (" . implode(' OR ', $wheres) . ")
+                            GROUP BY sliders.id 
+                        ORDER BY " . $orderByExtra . "sliders.title ASC");
+
     }
 
     public function getGroups($status = '*') {
@@ -167,7 +229,8 @@ class ModelSliders extends AbstractModelTable {
                 'type'      => $slider['type'],
                 'thumbnail' => empty($slider['thumbnail']) ? '' : $slider['thumbnail'],
                 'params'    => $slider['params']->toJSON(),
-                'time'      => date('Y-m-d H:i:s', Platform::getTimestamp())
+                'time'      => date('Y-m-d H:i:s', Platform::getTimestamp()),
+                'ordering'  => -1
             ));
 
             $sliderID = $this->table->insertId();
@@ -177,6 +240,7 @@ class ModelSliders extends AbstractModelTable {
             }
 
             $this->xref->add($groupID, $sliderID);
+            $this->reindexOrdering();
 
             SmartSlider3Info::sliderChanged();
 
@@ -276,12 +340,13 @@ class ModelSliders extends AbstractModelTable {
                 'params'    => json_encode($slider),
                 'thumbnail' => $thumbnail,
                 'time'      => date('Y-m-d H:i:s', Platform::getTimestamp()),
-                'ordering'  => $this->getMaximalOrderValue()
+                'ordering'  => -1
             ));
 
             $sliderID = $this->table->insertId();
 
             $this->xref->add($groupID, $sliderID);
+            $this->reindexOrdering();
 
             SmartSlider3Info::sliderChanged();
 
@@ -575,6 +640,7 @@ class ModelSliders extends AbstractModelTable {
         AbstractCache::clearGroup(AdminSlider::getCacheId($id));
 
         $this->markChanged($id);
+        $this->reindexOrdering();
 
         SmartSlider3Info::sliderChanged();
 
@@ -660,6 +726,8 @@ class ModelSliders extends AbstractModelTable {
             }
         }
 
+        $this->reindexOrdering();
+
         SmartSlider3Info::sliderChanged();
 
         return $newSliderId;
@@ -671,7 +739,8 @@ class ModelSliders extends AbstractModelTable {
         $helper->setSliderChanged($sliderid, 1);
     }
 
-    public function order($groupID, $ids, $isReverse = false) {
+    public function order($groupID, $ids, $isReverse = false, $orders = array()) {
+
         if (is_array($ids) && count($ids) > 0) {
             if ($isReverse) {
                 $ids = array_reverse($ids);
@@ -680,13 +749,23 @@ class ModelSliders extends AbstractModelTable {
             if ($groupID <= 0) {
                 $groupID = false;
             }
+            if (!empty($orders)) {
+                asort($orders);
+                $orders = array_values($orders);
+            }
+
             $i = 0;
             foreach ($ids as $id) {
                 $id = intval($id);
                 if ($id > 0) {
                     if (!$groupID) {
+                        if (!empty($orders)) {
+                            $order = intval($orders[$i]);
+                        } else {
+                            $order = $i;
+                        }
                         $this->table->update(array(
-                            'ordering' => $i,
+                            'ordering' => $order,
                         ), array(
                             "id" => $id
                         ));
@@ -707,6 +786,18 @@ class ModelSliders extends AbstractModelTable {
         }
 
         return false;
+    }
+
+    public function reindexOrdering() {
+        $sliders = $this->getAll(0);
+        foreach ($sliders as $idx => $slider) {
+            $this->table->update(array(
+                'ordering' => $idx
+            ), array(
+                "id" => $slider['id']
+            ));
+        }
+
     }
 
     protected function getMaximalOrderValue() {

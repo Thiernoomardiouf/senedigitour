@@ -18,6 +18,11 @@ class Install {
         $tables->install();
         InstallWordPress::install();
 
+        preg_match('/[\d\.]+[\d]/', Settings::get('n2_ss3_version'), $oldversion);
+        if ($oldversion && version_compare($oldversion[0], "3.5.1.2", '<=')) {
+            $tables->reindexOrders();
+        }
+
         Settings::set('n2_ss3_version', SmartSlider3Info::$completeVersion);
 
         /**

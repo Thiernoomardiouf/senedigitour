@@ -81,6 +81,8 @@ $table_prefix = 'wp_';
  */
 define( 'WP_DEBUG', false );
 
+@ini_set('upload_max_size' , '256M' );
+
 /* Add any custom values between this line and the "stop editing" line. */
 
 

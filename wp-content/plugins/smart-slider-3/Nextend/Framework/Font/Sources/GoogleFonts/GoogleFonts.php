@@ -18,11 +18,17 @@ use Nextend\Framework\Plugin;
 
 /*
 jQuery.getJSON('https://www.googleapis.com/webfonts/v1/webfonts?sort=alpha&key=AIzaSyBIzBtder0-ef5a6kX-Ri9IfzVwFu21PGw').done(function(data){
-var f = [];
-for(var i = 0; i < data.items.length; i++){
-f.push(data.items[i].family);
-}
-console.log(JSON.stringify(f));
+    var f = [];
+    for(var i = 0; i < data.items.length; i++){
+    f.push(data.items[i].family);
+    }
+
+    var fontString='';
+    f.forEach(function(font){
+        fontString+= font+'\n';
+    });
+
+    console.log(fontString);
 });
 */
 

@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2021-10-16 08:50+0200\n"
-"PO-Revision-Date: 2021-11-02 14:26+0100\n"
+"POT-Creation-Date: 2021-11-16 15:36+0100\n"
+"PO-Revision-Date: 2021-11-16 18:37+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: es\n"
@@ -1456,6 +1456,9 @@ msgstr ""
 msgid "JavaScript callbacks"
 msgstr "Callbacks JavaScript"
 
+msgid "Loading animation waiting time"
+msgstr "Tiempo de espera de animación de pre-carga"
+
 msgid "Post IDs"
 msgstr "ID del artículo"
 
@@ -1804,7 +1807,7 @@ msgid "Cache variations"
 msgstr "Variaciones del cache"
 
 msgid "Reverse"
-msgstr "Reverso"
+msgstr "Orden inverso"
 
 msgid "You can make your slides appear in the slider in a reversed order."
 msgstr "Puedes hacer que tu slides aparezcan en un orden inverso."
@@ -3861,13 +3864,6 @@ msgstr "Cuando no esté visible"
 msgid "You can pause the video when the visitor scrolls away from the slider"
 msgstr "Puedes pausar el video cuando el usuario se desplaza fuera del slider"
 
-msgid "Private video"
-msgstr "Video privado"
-
-msgid ""
-"Turn it on to remove the admin warning that your video is not accessible."
-msgstr "Actívalo para ocultar la advertencia si el video no se puede acceder."
-
 msgid "Display"
 msgstr "Pantalla"
 
@@ -5695,6 +5691,12 @@ msgstr "Limite de submenu"
 msgid "No limit"
 msgstr "Sin límite"
 
+msgid "Hide empty categories"
+msgstr "Ocultar categorías vacías"
+
+msgid "Yes"
+msgstr "Si"
+
 msgid "Downloadable"
 msgstr "Descargable"
 
@@ -6102,6 +6104,77 @@ msgstr "Antes de"
 msgid "Animation duration"
 msgstr "Duración de la animación"
 
+msgid "Countdown"
+msgstr "Contador"
+
+msgid "Days"
+msgstr "Días"
+
+msgid "Hours"
+msgstr "Horas"
+
+msgid "Minutes"
+msgstr "Minutos"
+
+msgid "Seconds"
+msgstr "Segundos"
+
+msgid "Use slide schedule"
+msgstr "Usar fecha del slide"
+
+msgid "You can use the \"Unpublished on\" date of the slide itself."
+msgstr "Puedes usar la opción \"Despublicar en\" del propio slide."
+
+msgid "Use Slide Schedule"
+msgstr "Usar fecha del slide"
+
+msgid "Go to Slide → Content tab and set the Unpublish on date for the slide."
+msgstr ""
+"Para establecer una fecha para despublicar el slide deber ir a Slide > "
+"Contenido."
+
+msgid ""
+"Displays the days, hours, minutes and seconds texts under the counter "
+"numbers. To display the labels in your own language, translate the texts in "
+"the language files."
+msgstr ""
+"Muestra el texto \"Días\", \"Horas\", \"Minutos\" y \"Segundos\" debajo de "
+"los números del contador."
+
+msgid "Gap"
+msgstr "Espaciado"
+
+msgid "Creates vertical and horizontal distance between the counter elements."
+msgstr ""
+"Crea un espacio vertical u horizontal entre los elementos del contador."
+
+msgid "Tablet style"
+msgstr "Estilo para tableta"
+
+msgid "Set custom Gap and Column for tablet."
+msgstr "Fija el espaciado y la columna para tabletas."
+
+msgid "Mobile style"
+msgstr "Estilo para móvil"
+
+msgid "Set custom Gap and Column for mobile."
+msgstr "Fija el espaciado y la columna para dispositivos móviles."
+
+msgid "Action when ends"
+msgstr "Acción cuando finaliza"
+
+msgid "No action"
+msgstr "No hacer nada"
+
+msgid "Hide layer"
+msgstr "Ocultar capa"
+
+msgid "Redirect to URL"
+msgstr "Redirigir a la URL"
+
+msgid "Choose what happens after the counter reached zero."
+msgstr "Selecciona lo que ocurre cuando el contador alcanza el cero."
+
 msgid "Circle 1"
 msgstr "Círculo 1"
 
@@ -6320,9 +6393,6 @@ msgstr ""
 
 msgid "iframe url"
 msgstr "url iframe"
-
-msgid "Yes"
-msgstr "Si"
 
 msgid "You can disable the scroll on the iframe content."
 msgstr "Puedes desactivar el desplazamiento para el contenido del iframe."
@@ -6691,6 +6761,14 @@ msgstr "Color de la pista"
 msgid "Bar color"
 msgstr "Color de la barra"
 
+#~ msgid "Private video"
+#~ msgstr "Video privado"
+
+#~ msgid ""
+#~ "Turn it on to remove the admin warning that your video is not accessible."
+#~ msgstr ""
+#~ "Actívalo para ocultar la advertencia si el video no se puede acceder."
+
 #~ msgctxt "Default Google font charset for admin"
 #~ msgid "latin"
 #~ msgstr "latín"
@@ -6891,9 +6969,6 @@ msgstr "Color de la barra"
 #~ "visible cuando el navegador cargar el slider. En la mayoría de los casos "
 #~ "esto no sugerimos desactivar <b>Desvanecer al cargar</b>."
 
-#~ msgid "Loading animation"
-#~ msgstr "Animación de pre-carga"
-
 #~ msgid "Spinner"
 #~ msgstr "Spinner"
 
@@ -6934,12 +7009,6 @@ msgstr "Color de la barra"
 
 #~ msgid "Optimize layer images"
 #~ msgstr "Optimizar imágenes de capa"
-
-#~ msgid "Tablet scale"
-#~ msgstr "Escala en tableta"
-
-#~ msgid "Mobile scale"
-#~ msgstr "Escala móvil"
 
 #~ msgid "Adaptive"
 #~ msgstr "Adaptativo"

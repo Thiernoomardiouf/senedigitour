@@ -53,6 +53,10 @@ class SliderAnimations extends AbstractSliderTab {
     }
 
     protected function layerAnimations() {
+        
+        /**
+         * Used for field removal: /animations/layer-animations
+         */
     }
 
     protected function layerParallax() {

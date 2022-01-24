@@ -1,4 +1,4 @@
-/*! elementor - v3.5.3 - 28-12-2021 */
+/*! elementor - v3.5.4 - 23-01-2022 */
 "use strict";
 (self["webpackChunkelementor"] = self["webpackChunkelementor"] || []).push([["frontend"],{
 
@@ -1820,7 +1820,7 @@ class Swiper {
     } // The Swiper will overlap the column width when applying custom margin values on the column.
 
 
-    container.closest('.elementor-widget-wrap').addClass('e-swiper-container');
+    jQuery(container).closest('.elementor-widget-wrap').addClass('e-swiper-container');
     return new Promise(resolve => {
       if (!elementorFrontend.config.experimentalFeatures.e_optimized_assets_loading) {
         return resolve(this.createSwiperInstance(container, this.config));
